@@ -22,13 +22,13 @@ jobs:
       - name: HACS validation
         uses: hacs/action@main
         with:
-          category: plugin
+          category: integration
 
-      - name: Extract version from package.json
+      - name: Extract version from manifest.json
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: get_version
         run: |
-          VERSION=$(jq -r '.version' package.json)
+          VERSION=$(jq -r '.version' custom_components/gpslive/manifest.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
