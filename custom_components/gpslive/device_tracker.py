@@ -44,17 +44,17 @@ class GPSLiveDeviceTracker(CoordinatorEntity, TrackerEntity):
         """Initialize the device tracker."""
         super().__init__(coordinator)
         self._device = device
-        self._attr_unique_id = f"gpslive_{device.get('id', device.get('device_id'))}"
-        self._attr_name = device.get("name", f"GPSLive Device {device.get('id')}")
+        self._attr_unique_id = f"gpslive_{device.get('imei')}"
+        self._attr_name = device.get("name", f"GPSLive {device.get('plateNumber', device.get('imei'))}")
 
     @property
     def device_info(self) -> dict[str, Any]:
         """Return device information about this entity."""
         return {
-            "identifiers": {(DOMAIN, self._device.get("id", self._device.get("device_id")))},
+            "identifiers": {(DOMAIN, self._device.get("imei"))},
             "name": self._attr_name,
             "manufacturer": "GPSLive",
-            "model": self._device.get("model", "GPS Tracker"),
+            "model": self._device.get("protocol", "GPS Tracker"),
         }
 
     @property
@@ -65,42 +65,55 @@ class GPSLiveDeviceTracker(CoordinatorEntity, TrackerEntity):
     @property
     def latitude(self) -> float | None:
         """Return latitude value of the device."""
-        # Update these based on your API response structure
-        if location := self._device.get("location"):
-            return location.get("latitude") or location.get("lat")
-        return self._device.get("latitude") or self._device.get("lat")
+        return self._device.get("lat")
 
     @property
     def longitude(self) -> float | None:
         """Return longitude value of the device."""
-        # Update these based on your API response structure
-        if location := self._device.get("location"):
-            return location.get("longitude") or location.get("lng") or location.get("lon")
-        return self._device.get("longitude") or self._device.get("lng") or self._device.get("lon")
+        return self._device.get("lng")
 
     @property
     def battery_level(self) -> int | None:
         """Return the battery level of the device."""
-        return self._device.get("battery_level") or self._device.get("battery")
+        if params := self._device.get("params"):
+            if isinstance(params, dict):
+                # Battery level might be in params.battery or params.power
+                return params.get("battery") or params.get("power")
+        return None
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return extra attributes."""
         attrs = {}
         
-        # Add any additional attributes from the device data
-        for key in ["speed", "heading", "altitude", "accuracy", "timestamp", "last_update"]:
-            if value := self._device.get(key):
-                attrs[key] = value
+        # Add attributes from the device data
+        if imei := self._device.get("imei"):
+            attrs["imei"] = imei
+        if plate := self._device.get("plateNumber"):
+            attrs["plate_number"] = plate
+        if speed := self._device.get("speed"):
+            attrs["speed"] = speed
+        if odometer := self._device.get("odometer"):
+            attrs["odometer"] = odometer
+        if dt_tracker := self._device.get("dtTracker"):
+            attrs["last_update"] = dt_tracker
+        if protocol := self._device.get("protocol"):
+            attrs["protocol"] = protocol
+        if active := self._device.get("active"):
+            attrs["active"] = active
+        
+        # Add params if available
+        if params := self._device.get("params"):
+            if isinstance(params, dict):
+                attrs["params"] = params
         
         return attrs
 
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        # Find updated device data
+        # Find updated device data by IMEI
         for device in self.coordinator.data:
-            device_id = device.get("id", device.get("device_id"))
-            if device_id == self._device.get("id", self._device.get("device_id")):
+            if device.get("imei") == self._device.get("imei"):
                 self._device = device
                 break
         

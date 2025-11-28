@@ -49,16 +49,21 @@ class GPSLiveAPI:
             raise GPSLiveConnectionError(f"Connection error: {err}") from err
 
     async def get_devices(self) -> list[dict[str, Any]]:
-        """Get all devices from the API."""
-        # This endpoint will be updated based on your OpenAPI spec
-        response = await self._request("GET", "/api/v1/devices")
+        """Get all devices with last known locations."""
+        response = await self._request("GET", "/v1/devices/list")
         return response if isinstance(response, list) else []
 
-    async def get_device_details(self, device_id: str) -> dict[str, Any]:
-        """Get details for a specific device."""
-        # This endpoint will be updated based on your OpenAPI spec
-        response = await self._request("GET", f"/api/v1/devices/{device_id}")
-        return response if isinstance(response, dict) else {}
+    async def get_devices_detailed(self) -> list[dict[str, Any]]:
+        """Get detailed device information including sensors and drivers."""
+        response = await self._request("GET", "/v1/devices")
+        return response if isinstance(response, list) else []
+
+    async def get_device_locations(self, imeis: list[str]) -> list[dict[str, Any]]:
+        """Get last known locations for specific devices."""
+        response = await self._request(
+            "POST", "/v1/devices/locations", json={"imeis": imeis}
+        )
+        return response if isinstance(response, list) else []
 
 
 class GPSLiveError(Exception):

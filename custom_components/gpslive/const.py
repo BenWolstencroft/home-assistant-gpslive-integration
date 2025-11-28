@@ -9,5 +9,5 @@ CONF_API_KEY = "api_key"
 DEFAULT_SCAN_INTERVAL = 30  # seconds
 
 # API
-API_BASE_URL = "https://api.gpslive.io"
+API_BASE_URL = "https://api.gpslive.app"
 API_TIMEOUT = 10
