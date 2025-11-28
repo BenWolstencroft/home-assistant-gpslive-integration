@@ -1,7 +1,4 @@
 {
   "name": "GPSLive",
-  "render_readme": true,
-  "domains": ["device_tracker", "sensor"],
-  "iot_class": "Cloud Polling",
-  "homeassistant": "2023.1.0"
+  "render_readme": true
 }
