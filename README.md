@@ -18,7 +18,7 @@ A custom Home Assistant integration for GPSLive GPS tracking devices. This integ
 2. Click on "Integrations"
 3. Click the three dots in the top right corner
 4. Select "Custom repositories"
-5. Add this repository URL: `https://github.com/BenWolstencroft/home-assistant-integrations`
+5. Add this repository URL: `https://github.com/BenWolstencroft/home-assistant-gpslive-integration`
 6. Select category: "Integration"
 7. Click "Add"
 8. Search for "GPSLive" and install
@@ -99,7 +99,7 @@ Each device tracker provides the following attributes:
 ## Support
 
 For issues, feature requests, or questions:
-- [GitHub Issues](https://github.com/BenWolstencroft/home-assistant-integrations/issues)
+- [GitHub Issues](https://github.com/BenWolstencroft/home-assistant-gpslive-integration/issues)
 
 ## License
 

@@ -4,10 +4,10 @@
   "codeowners": ["@BenWolstencroft"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/BenWolstencroft/home-assistant-integrations",
+  "documentation": "https://github.com/BenWolstencroft/home-assistant-gpslive-integration",
   "integration_type": "device",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/BenWolstencroft/home-assistant-integrations/issues",
+  "issue_tracker": "https://github.com/BenWolstencroft/home-assistant-gpslive-integration/issues",
   "requirements": ["aiohttp>=3.8.0"],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
